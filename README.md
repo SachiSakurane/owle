@@ -1,0 +1,2 @@
+# owle
+decltype(auto) 🦉 = 🐱 | 🐦;
