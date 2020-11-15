@@ -1,2 +1,3 @@
+🦉
+
 # owle
-decltype(auto) 🦉 = 🐱 | 🐦;
