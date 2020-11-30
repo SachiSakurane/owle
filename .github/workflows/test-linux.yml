@@ -20,8 +20,8 @@ jobs:
 
     - name: Build
       run: |
-        cmake -B ${BUILD_DIRECTORY} -G Ninja -DCMAKE_BUILD_TYPE=Release
-        ninja -C ${BUILD_DIRECTORY} ${REPOSITORY_NAME}_Test -j 4
+        cmake -B ${BUILD_DIRECTORY} -DCMAKE_BUILD_TYPE=Release
+        cmake --build ${BUILD_DIRECTORY} --target ${REPOSITORY_NAME}_Test -j 4
 
     - name: Test
       run: |
