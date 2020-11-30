@@ -5,14 +5,25 @@
 #include <gtest/gtest.h>
 #include <owle/concepts/processable.hpp>
 
-struct Process {
-    bool process() { return true; }
+struct BoolProcess {
+    bool process();
 };
 
-template <class ProcessableType> requires owle::Processable<ProcessableType>
-struct HasProcess : ProcessableType {};
+struct VoidProcess {
+    void process();
+};
 
-TEST(ProcessableTest, HasProcessable) {
-    ASSERT_TRUE(Process().process());
-    ASSERT_TRUE((owle::Processable<Process>));
+struct MissProcess {
+    void proceed();
+};
+
+bool ProcessableStaticTest() {
+    static_assert(owle::Processable<BoolProcess>, "BoolProcess has Processable concept");
+    static_assert(owle::Processable<VoidProcess>, "VoidProcess has Processable concept");
+    static_assert(!owle::Processable<MissProcess>, "VoidProcess has Processable concept");
+    return true;
+}
+
+TEST(ProcessableTest, StaticTest) {
+    ASSERT_TRUE(ProcessableStaticTest());
 }

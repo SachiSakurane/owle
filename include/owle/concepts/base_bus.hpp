@@ -8,8 +8,8 @@
 
 namespace owle {
     template <class BaseBusType>
-    concept BaseBus = requires (const BaseBusType& bus) {
-        {bus.getNumChannels()} -> owle::convertible_to<size_t>;
-        {bus.getNumSamples()} -> owle::convertible_to<size_t>;
+    concept BaseBus = requires () {
+        {std::declval<BaseBusType>().getNumChannels()} -> owle::convertible_to<size_t>;
+        {std::declval<BaseBusType>().getNumSamples()} -> owle::convertible_to<size_t>;
     };
 }

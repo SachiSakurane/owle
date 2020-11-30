@@ -8,13 +8,16 @@
 
 namespace owle {
     namespace detail {
-        template <class ProcessableType>
-        static auto has_process_impl(ProcessableType&& processable) -> owle::sfinae_true<decltype(processable.process())>;
-        template <class>
-        static auto has_process_impl(...) -> std::false_type;
+        template<class ProcessableType, class = void>
+        struct has_process_impl : std::false_type {};
+
+        template<class ProcessableType>
+        struct has_process_impl<ProcessableType,
+                std::enable_if_t<owle::sfinae_true<decltype(std::declval<ProcessableType>().process())>::value>> :
+                std::true_type {};
 
         template <class ProcessableType>
-        struct has_process : decltype(has_process_impl(std::declval<ProcessableType>())) {};
+        struct has_process : has_process_impl<ProcessableType> {};
 
         template <class ProcessableType>
         inline constexpr bool has_process_v = has_process<ProcessableType>::value;

@@ -6,50 +6,48 @@
 #include <owle/concepts/connectable.hpp>
 
 struct Connection {
-    bool process(int v) const { return v == 42; }
+    bool process(int v);
 };
 
-struct Process {
-    int process() const { return 42; }
+struct IntProcess {
+    int process();
 };
 
-template <class ConnectionType, class ArgsType> requires owle::ArgsConnectable<ConnectionType, ArgsType>
-struct ArgsConnectable {
-    bool process() const { return ConnectionType().process(ArgsType{42}); }
+struct VoidProcess {
+    void process();
 };
 
-template <class ConnectionType, class ProcessType> requires owle::ProcessConnectable<ConnectionType, ProcessType>
-struct ProcessConnectable {
-    bool process() const { return ConnectionType().process(ProcessType().process()); }
-};
+bool StaticArgsConnectableTest() {
+    static_assert(owle::ArgsConnectable<Connection, int>, "<Connection, int> has ArgsConnectable concept");
+    static_assert(!owle::ArgsConnectable<Connection, void>, "<Connection, void> hasn't ArgsConnectable concept");
 
-template <class ConnectionType, class Type> requires owle::Connectable<ConnectionType, Type>
-struct Connectable {
-    bool process() const {
-        if constexpr (owle::ArgsConnectable<ConnectionType, Type>) {
-            return ConnectionType().process(Type{42});
-        } else if constexpr (owle::ProcessConnectable<ConnectionType, Type>) {
-            return ConnectionType().process(Type().process());
-        }
-    }
-};
-
-TEST(ArgsConnectableTest, ArgsConnection) {
-    ASSERT_FALSE(Connection().process(0));
-    ASSERT_TRUE(Connection().process(42));
-    ASSERT_TRUE((owle::ArgsConnectable<Connection, int>));
-    ASSERT_TRUE((ArgsConnectable<Connection, int>().process()));
+    return true;
 }
 
-TEST(ProcessConnectableTest, ProcessConnection) {
-    ASSERT_TRUE(Connection().process(Process().process()));
-    ASSERT_TRUE((owle::ProcessConnectable<Connection, Process>));
-    ASSERT_TRUE((ProcessConnectable<Connection, Process>().process()));
+bool StaticProcessConnectableTest() {
+    static_assert(owle::ProcessConnectable<Connection, IntProcess>, "<Connection, IntProcess> has ProcessConnectable concept");
+    static_assert(!owle::ProcessConnectable<Connection, VoidProcess>, "<Connection, VoidProcess> hasn't ProcessConnectable concept");
+
+    return true;
 }
 
-TEST(ConnectableTest, Connection) {
-    ASSERT_TRUE((owle::Connectable<Connection, int>));
-    ASSERT_TRUE((owle::Connectable<Connection, Process>));
-    ASSERT_TRUE((Connectable<Connection, int>().process()));
-    ASSERT_TRUE((Connectable<Connection, Process>().process()));
+bool StaticConnectableTest() {
+    static_assert(owle::Connectable<Connection, int>, "<Connection, int> has Connectable concept");
+    static_assert(!owle::Connectable<Connection, void>, "<Connection, void> hasn't Connectable concept");
+    static_assert(owle::Connectable<Connection, IntProcess>, "<Connection, IntProcess> has Connectable concept");
+    static_assert(!owle::Connectable<Connection, VoidProcess>, "<Connection, VoidProcess> hasn't Connectable concept");
+
+    return true;
+}
+
+TEST(ArgsConnectableTest, StaticTest) {
+    ASSERT_TRUE(StaticArgsConnectableTest());
+}
+
+TEST(ProcessConnectableTest, StaticTest) {
+    ASSERT_TRUE(StaticProcessConnectableTest());
+}
+
+TEST(ConnectableTest, StaticTest) {
+    ASSERT_TRUE(StaticConnectableTest());
 }
