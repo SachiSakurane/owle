@@ -6,14 +6,14 @@
 #include <owle/concepts/processable.hpp>
 
 struct Process {
-    bool process() const { return true; }
+    [[nodiscard]] bool process() const { return true; }
 };
 
 template <class ProcessableType> requires owle::Processable<ProcessableType>
 struct HasProcess : ProcessableType {};
 
 TEST(ProcessableTest, HasProcessable) {
-    static_assert(HasProcess<Process>().process(), "a");
-    ASSERT_EQ((HasProcess<Process>().process()), true);
+    std::cout << Process().process() << std::endl;
+    ASSERT_EQ(Process().process(), true);
     ASSERT_EQ((owle::Processable<Process>), true);
 }
