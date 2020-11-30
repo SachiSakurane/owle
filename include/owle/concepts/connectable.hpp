@@ -17,10 +17,12 @@ namespace owle {
         static auto has_connectable_impl(...) -> std::false_type;
 
         template <class ConnectableType, class ArgumentType>
-        struct has_args_connectable : decltype(has_connectable_impl(std::declval<ArgumentType>())) {};
+        struct has_args_connectable :
+            decltype(has_connectable_impl<ConnectableType>(std::declval<ArgumentType>())) {};
 
         template <class ConnectableType, class ProcessableType> requires owle::Processable<ProcessableType>
-        struct has_process_connectable : decltype(has_connectable_impl(std::declval<ProcessableType>().process)) {};
+        struct has_process_connectable :
+            decltype(has_connectable_impl<ConnectableType>(std::declval<ProcessableType>().process())) {};
 
         template <class ConnectableType, class ArgumentType>
         inline constexpr bool has_args_connectable_v = has_args_connectable<ConnectableType, ArgumentType>::value;

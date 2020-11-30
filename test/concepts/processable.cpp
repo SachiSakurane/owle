@@ -13,5 +13,7 @@ template <class ProcessableType> requires owle::Processable<ProcessableType>
 struct HasProcess : ProcessableType {};
 
 TEST(ProcessableTest, HasProcessable) {
-    ASSERT_EQ(HasProcess<Process>().process(), true);
+    static_assert(HasProcess<Process>().process(), "a");
+    ASSERT_EQ((HasProcess<Process>().process()), true);
+    ASSERT_EQ((owle::Processable<Process>), true);
 }
