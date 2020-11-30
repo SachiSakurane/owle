@@ -9,7 +9,7 @@ on:
 jobs:
   release-windows:
     env:
-      REPOSITORY_NAME: SanityController
+      REPOSITORY_NAME: owle
       BUILD_DIRECTORY: cmake-build
     runs-on: windows-latest
     steps:
@@ -22,7 +22,7 @@ jobs:
       shell: bash
       run: |
         cmake -B ${BUILD_DIRECTORY}
-        cmake --build ${BUILD_DIRECTORY} --target ${REPOSITORY_NAME}_All -j 4 --config Release
+        cmake --build ${BUILD_DIRECTORY} --target ${REPOSITORY_NAME}_Test -j 4 --config Release
 
     - name: Test
       run: |
