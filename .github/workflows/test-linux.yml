@@ -20,7 +20,7 @@ jobs:
 
     - name: Build
       run: |
-        cmake -B ${BUILD_DIRECTORY} -DCMAKE_BUILD_TYPE=Release
+        cmake -B ${BUILD_DIRECTORY} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++-10.2
         cmake --build ${BUILD_DIRECTORY} --target ${REPOSITORY_NAME}_Test -j 4
 
     - name: Test
