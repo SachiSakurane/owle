@@ -6,16 +6,16 @@
 #include <owle/concepts/connectable.hpp>
 
 struct Connection {
-    bool process(int) const { return true; }
+    bool process(int v) const { return v == 42; }
 };
 
 struct Process {
-    int process() const { return 0; }
+    int process() const { return 42; }
 };
 
 template <class ConnectionType, class ArgsType> requires owle::ArgsConnectable<ConnectionType, ArgsType>
 struct ArgsConnectable {
-    bool process() const { return ConnectionType().process(ArgsType{0}); }
+    bool process() const { return ConnectionType().process(ArgsType{42}); }
 };
 
 template <class ConnectionType, class ProcessType> requires owle::ProcessConnectable<ConnectionType, ProcessType>
@@ -27,7 +27,7 @@ template <class ConnectionType, class Type> requires owle::Connectable<Connectio
 struct Connectable {
     bool process() const {
         if constexpr (owle::ArgsConnectable<ConnectionType, Type>) {
-            return ConnectionType().process(Type{0});
+            return ConnectionType().process(Type{42});
         } else if constexpr (owle::ProcessConnectable<ConnectionType, Type>) {
             return ConnectionType().process(Type().process());
         }
@@ -35,18 +35,21 @@ struct Connectable {
 };
 
 TEST(ArgsConnectableTest, ArgsConnection) {
-    ASSERT_EQ((owle::ArgsConnectable<Connection, int>), true);
-    ASSERT_EQ((ArgsConnectable<Connection, int>().process()), true);
+    ASSERT_FALSE(Connection().process(0));
+    ASSERT_TRUE(Connection().process(42));
+    ASSERT_TRUE((owle::ArgsConnectable<Connection, int>));
+    ASSERT_TRUE((ArgsConnectable<Connection, int>().process()));
 }
 
 TEST(ProcessConnectableTest, ProcessConnection) {
-    ASSERT_EQ((owle::ProcessConnectable<Connection, Process>), true);
-    ASSERT_EQ((ProcessConnectable<Connection, Process>().process()), true);
+    ASSERT_TRUE(Connection().process(Process().process()));
+    ASSERT_TRUE((owle::ProcessConnectable<Connection, Process>));
+    ASSERT_TRUE((ProcessConnectable<Connection, Process>().process()));
 }
 
 TEST(ConnectableTest, Connection) {
-    ASSERT_EQ((owle::Connectable<Connection, int>), true);
-    ASSERT_EQ((owle::Connectable<Connection, Process>), true);
-    ASSERT_EQ((Connectable<Connection, int>().process()), true);
-    ASSERT_EQ((Connectable<Connection, Process>().process()), true);
+    ASSERT_TRUE((owle::Connectable<Connection, int>));
+    ASSERT_TRUE((owle::Connectable<Connection, Process>));
+    ASSERT_TRUE((Connectable<Connection, int>().process()));
+    ASSERT_TRUE((Connectable<Connection, Process>().process()));
 }
