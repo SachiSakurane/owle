@@ -1,0 +1,28 @@
+name: Test OSX
+
+on: 
+  push:
+    tags:
+      - v*
+      - o*
+
+jobs:
+  release-osx:
+    env:
+      REPOSITORY_NAME: owle
+      BUILD_DIRECTORY: cmake-build
+    runs-on: macOS-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Build
+      run: |
+        cmake -B ${BUILD_DIRECTORY} -DCMAKE_BUILD_TYPE=Release
+        cmake --build ${BUILD_DIRECTORY} --target ${REPOSITORY_NAME}_Test -j 4
+
+    - name: Test
+      run: |
+        ./${BUILD_DIRECTORY}/test/${REPOSITORY_NAME}_Test

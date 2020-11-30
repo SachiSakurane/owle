@@ -18,7 +18,7 @@ namespace owle {
 
     template <class ConnectionType, class ProcessableType>
     concept ProcessConnectable = requires () {
-        std::declval<ConnectableType>().process(std::declval<ProcessableType>().process());
+        std::declval<ConnectionType>().process(std::declval<ProcessableType>().process());
     };
 
     template <class ConnectionType, class Type>

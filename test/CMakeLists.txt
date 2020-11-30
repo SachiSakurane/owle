@@ -1,14 +1,13 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.16)
 
 include(External_GTest.cmake)
+include(GoogleTest)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(TEST_PROJECT_NAME ${CMAKE_PROJECT_NAME}_Test)
-
-include(googletest)
 
 add_executable(${TEST_PROJECT_NAME}
         main.cpp

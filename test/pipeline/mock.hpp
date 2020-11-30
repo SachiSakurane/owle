@@ -4,7 +4,7 @@
 
 #pragma once
 
-template <class From, class To>
+template <class From, class To, class = std::enable_if_t<owle::convertible_to<From, To>>>
 struct Connection {
     To process(From v) {
         return static_cast<To>(v);

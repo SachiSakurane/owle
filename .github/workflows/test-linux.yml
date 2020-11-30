@@ -1,0 +1,28 @@
+name: Test Linux
+
+on:
+  push:
+    tags:
+      - v*
+      - l*
+
+jobs:
+  release-linux:
+    env:
+      REPOSITORY_NAME: owle
+      BUILD_DIRECTORY: cmake-build
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Build
+      run: |
+        cmake -B ${BUILD_DIRECTORY} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++-10
+        cmake --build ${BUILD_DIRECTORY} --target ${REPOSITORY_NAME}_Test -j 4
+
+    - name: Test
+      run: |
+        ./${BUILD_DIRECTORY}/test/${REPOSITORY_NAME}_Test

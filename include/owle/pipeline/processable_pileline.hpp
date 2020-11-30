@@ -12,7 +12,7 @@ namespace owle {
     template <class ConnectionType, class UnaryArgType, class = void>
     class ProcessableBinder {
     public:
-        explicit ProcessableBinder(ConnectionType&& connection, UnaryArgType arg) :
+        explicit ProcessableBinder(ConnectionType&& connection, UnaryArgType&& arg) :
             connection {std::forward<ConnectionType>(connection)},
             arg {std::forward<UnaryArgType>(arg)} {
         }
