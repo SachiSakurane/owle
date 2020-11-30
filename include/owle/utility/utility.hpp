@@ -15,4 +15,11 @@ namespace owle{
 
     template<class From, class To>
     concept convertible_to = std::is_convertible_v<From, To>;
+
+    namespace detail {
+        template <class T, class U>
+        concept same_as_impl = std::is_same_v<T, U>;
+    }
+    template <class T, class U>
+    concept same_as = detail::same_as_impl<T, U> && detail::same_as_impl<U, T>;
 }

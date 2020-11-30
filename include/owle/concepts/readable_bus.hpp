@@ -16,12 +16,12 @@ namespace owle {
     concept ReadableBus = owle::BaseBus<ReadableBusType> && requires () {
         typename std::remove_cvref_t<ReadableBusType>::SampleType;
         {std::declval<ReadableBusType>().getReadPointer(std::declval<int>())} ->
-            owle::convertible_to<const typename std::remove_cvref_t<ReadableBusType>::SampleType*>;
+            owle::same_as<const typename std::remove_cvref_t<ReadableBusType>::SampleType*>;
     };
 #else
     namespace detail {
         OWLE_HAS_SINGLE_TYPE_CLASS_MEMBER(has_read_pointer,
-                                          (owle::convertible_to<
+                                          (owle::same_as<
                                               const typename std::remove_cvref_t<Type>::SampleType*,
                                               decltype(std::declval<Type>().getReadPointer(std::declval<int>()))>))
     }
