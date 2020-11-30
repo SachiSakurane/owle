@@ -1,0 +1,31 @@
+name: Test OSX
+
+on: 
+  push:
+    tags:
+      - v*
+      - o*
+
+jobs:
+  release-osx:
+    env:
+      REPOSITORY_NAME: owle
+      BUILD_DIRECTORY: ninja-build
+    runs-on: macOS-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Install Ninja
+      uses: seanmiddleditch/gha-setup-ninja@master
+
+    - name: Build
+      run: |
+        cmake -B ${BUILD_DIRECTORY} -G Ninja -DCMAKE_BUILD_TYPE=Release
+        ninja -C ${BUILD_DIRECTORY} ${REPOSITORY_NAME}_Test -j 4
+
+    - name: Test
+      run: |
+        ./${BUILD_DIRECTORY}/test/${REPOSITORY_NAME}_Test
