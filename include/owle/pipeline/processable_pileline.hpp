@@ -1,5 +1,5 @@
 //
-// Created by Himatya on 2020/11/09.
+// Created by SachiSakurane on 2020/11/09.
 //
 
 #pragma once
@@ -9,8 +9,7 @@
 #include <owle/concepts/readable_bus.hpp>
 
 namespace owle {
-
-    template <class ConnectionType, class UnaryArgType>
+    template <class ConnectionType, class UnaryArgType, class = void>
     class ProcessableBinder {
     public:
         explicit ProcessableBinder(ConnectionType&& connection, UnaryArgType arg) :
@@ -29,8 +28,9 @@ namespace owle {
 
     };
 
-    template <class ConnectionType, owle::Processable ProcessableType> requires ProcessConnectable<ConnectionType, ProcessableType>
-    class ProcessableBinder<ConnectionType, ProcessableType> {
+    template <class ConnectionType, class ProcessableType>
+    class ProcessableBinder<ConnectionType, ProcessableType,
+        std::enable_if_t<owle::Processable<ProcessableType> && ProcessConnectable<ConnectionType, ProcessableType>>> {
     public:
         ProcessableBinder(ConnectionType&& connection, ProcessableType&& processable) :
             connection {std::forward<ConnectionType>(connection)},
@@ -56,8 +56,8 @@ namespace owle {
     }
 
     // connection.process(processable.process())
-    template <owle::Processable ProcessableType, class ConnectionType>
-    requires ProcessConnectable<ConnectionType, ProcessableType>
+    template <class ProcessableType, class ConnectionType>
+        requires owle::Processable<ProcessableType> && owle::ProcessConnectable<ConnectionType, ProcessableType>
     inline decltype(auto) operator | (ProcessableType&& processable, ConnectionType&& connection) {
         return owle::ProcessableBinder<ConnectionType, ProcessableType>
             {std::forward<ConnectionType>(connection), std::forward<ProcessableType>(processable)};

@@ -1,5 +1,5 @@
 //
-// Created by Himatya on 2020/11/09.
+// Created by SachiSakurane on 2020/11/09.
 //
 
 #pragma once
@@ -10,6 +10,20 @@
 #include <owle/utility/utility.hpp>
 
 namespace owle {
+#ifdef __cpp_lib_concepts
+    template <class ConnectableType, class ArgumentType>
+    concept ArgsConnectable = requires () {
+        std::declval<ConnectableType>().process(std::declval<ArgumentType>());
+    };
+
+    template <class ConnectionType, class ProcessableType>
+    concept ProcessConnectable = requires () {
+        std::declval<ConnectableType>().process(std::declval<ProcessableType>().process());
+    };
+
+    template <class ConnectionType, class Type>
+    concept Connectable = ArgsConnectable<ConnectionType, Type> || ProcessConnectable<ConnectionType, Type>;
+#else
     namespace detail {
         template<class ConnectableType, class ArgumentType, class = void>
         struct has_connectable_impl : std::false_type {};
@@ -41,4 +55,5 @@ namespace owle {
 
     template <class ConnectionType, class Type>
     concept Connectable = ArgsConnectable<ConnectionType, Type> || ProcessConnectable<ConnectionType, Type>;
+#endif
 }

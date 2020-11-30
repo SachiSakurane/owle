@@ -13,8 +13,13 @@ include(googletest)
 add_executable(${TEST_PROJECT_NAME}
         main.cpp
         concepts/base_bus.cpp
+        concepts/bidirectional_bus.cpp
         concepts/connectable.cpp
-        concepts/processable.cpp concepts/readable_bus.cpp)
+        concepts/processable.cpp
+        concepts/readable_bus.cpp
+        concepts/writable_bus.cpp
+        pipeline/connectable_pipeline.cpp
+        pipeline/processable_pipeline.cpp)
 
 target_link_libraries(${TEST_PROJECT_NAME} PRIVATE
         ${GTEST_LIBRARY}
