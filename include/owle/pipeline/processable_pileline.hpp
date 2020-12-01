@@ -10,18 +10,11 @@
 
 namespace owle {
     template <class ConnectionType, class UnaryArgType, class = void>
-    class ProcessableBinder {
-    public:
-        explicit ProcessableBinder(ConnectionType&& connection, UnaryArgType&& arg) :
-            connection {std::forward<ConnectionType>(connection)},
-            arg {std::forward<UnaryArgType>(arg)} {
-        }
-
+    struct ProcessableBinder {
         decltype(auto) process() {
             return std::forward<ConnectionType>(connection).process(std::forward<UnaryArgType>(arg));
         }
 
-    private:
         ConnectionType&& connection;
         UnaryArgType&& arg;
 
