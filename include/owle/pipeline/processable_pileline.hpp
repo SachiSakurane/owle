@@ -21,20 +21,13 @@ namespace owle {
     };
 
     template <class ConnectionType, class ProcessableType>
-    class ProcessableBinder<ConnectionType, ProcessableType,
+    struct ProcessableBinder<ConnectionType, ProcessableType,
         std::enable_if_t<owle::Processable<ProcessableType> && ProcessConnectable<ConnectionType, ProcessableType>>> {
-    public:
-        ProcessableBinder(ConnectionType&& connection, ProcessableType&& processable) :
-            connection {std::forward<ConnectionType>(connection)},
-            processable {std::forward<ProcessableType>(processable)} {
-        }
-
         decltype(auto) process() {
             return std::forward<ConnectionType>(connection).process(
                 std::forward<ProcessableType>(processable).process());
         }
 
-    private:
         ConnectionType&& connection;
         ProcessableType&& processable;
 
@@ -44,7 +37,7 @@ namespace owle {
     template <class Type, class ConnectionType> requires owle::ArgsConnectable<ConnectionType, Type>
     inline decltype(auto) operator | (Type&& value, ConnectionType&& connection) {
         return owle::ProcessableBinder<ConnectionType, Type>
-            {std::forward<ConnectionType>(connection), std::forward<Type>(value)};
+            {(std::forward<ConnectionType>(connection)), (std::forward<Type>(value))};
     }
 
     // connection.process(processable.process())
