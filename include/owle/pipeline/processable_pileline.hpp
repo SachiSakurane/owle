@@ -12,8 +12,7 @@ namespace owle {
     template <class ConnectionType, class UnaryArgType, class = void>
     struct ProcessableBinder {
         decltype(auto) process() {
-            return std::forward<ConnectionType>(connection).process(
-                std::forward<UnaryArgType>(arg));
+            return std::forward<ConnectionType>(connection).process(std::forward<UnaryArgType>(arg));
         }
 
         ConnectionType&& connection;
@@ -21,21 +20,26 @@ namespace owle {
 
     };
 
-    template <class ConnectionType, class ProcessableType>
-    class ProcessableBinder<ConnectionType, ProcessableType,
-        std::enable_if_t<owle::Processable<ProcessableType> && ProcessConnectable<ConnectionType, ProcessableType>>> {
-    public:
-        ProcessableBinder(ConnectionType&& connection, ProcessableType&& processable) :
-            connection {std::forward<ConnectionType>(connection)},
-            processable {std::forward<ProcessableType>(processable)} {
+    template <class ConnectionType, class UnaryArgType>
+    struct ProcessableBinder<ConnectionType, UnaryArgType,
+        std::enable_if_t<std::is_scalar_v<UnaryArgType>>> {
+        decltype(auto) process() {
+            return std::forward<ConnectionType>(connection).process(arg);
         }
 
+        ConnectionType&& connection;
+        UnaryArgType arg;
+
+    };
+
+    template <class ConnectionType, class ProcessableType>
+    struct ProcessableBinder<ConnectionType, ProcessableType,
+        std::enable_if_t<owle::Processable<ProcessableType> && ProcessConnectable<ConnectionType, ProcessableType>>> {
         decltype(auto) process() {
             return std::forward<ConnectionType>(connection).process(
                 std::forward<ProcessableType>(processable).process());
         }
 
-    private:
         ConnectionType&& connection;
         ProcessableType&& processable;
 
