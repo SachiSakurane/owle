@@ -22,9 +22,9 @@ add_executable(${TEST_PROJECT_NAME}
         pipeline/processable_pipeline.cpp)
 
 target_link_libraries(${TEST_PROJECT_NAME} PRIVATE
-        pthread
         ${GTEST_LIBRARY}
-        ${GMOCK_LIBRARY})
+        ${GMOCK_LIBRARY}
+        pthread)
 
 target_include_directories(${TEST_PROJECT_NAME} PRIVATE
         ${GTEST_INCLUDE_DIRS}
