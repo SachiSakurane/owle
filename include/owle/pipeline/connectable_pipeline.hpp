@@ -8,12 +8,7 @@
 
 namespace owle {
     template <class LeftType, class RightType>
-    class ConnectableBinder {
-    public:
-        ConnectableBinder(LeftType&& left, RightType&& right) :
-            left {std::forward<LeftType>(left)},
-            right {std::forward<RightType>(right)} {}
-
+    struct ConnectableBinder {
         template <class Type> requires
             owle::Connectable<LeftType, Type> &&
             owle::ProcessConnectable<RightType, decltype(std::declval<Type>() | std::declval<LeftType>())>
@@ -21,9 +16,9 @@ namespace owle {
             return std::forward<RightType>(right).process((std::forward<Type>(value) | std::forward<LeftType>(left)).process());
         }
 
-    private:
         LeftType&& left;
         RightType&& right;
+
     };
 
     // right.process(left.process(value))
