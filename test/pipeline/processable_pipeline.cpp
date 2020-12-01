@@ -26,9 +26,9 @@ TEST(ProcessablePipelineConceptTest, LRTest) {
 
 TEST(ProcessablePipelineConceptTest, RLTest) {
     decltype(auto) connection = Connection<int, bool>{};
-    decltype(auto) processable = 1 | connection;
+    decltype(auto) processable = 11 | connection;
     ASSERT_TRUE(processable.process());
-    ASSERT_TRUE((1 | connection).process());
+    ASSERT_TRUE((11 | connection).process());
     decltype(auto) connection0 = Connection<bool, bool>{};
     decltype(auto) processable0 = true | connection;
     ASSERT_TRUE(processable0.process());
