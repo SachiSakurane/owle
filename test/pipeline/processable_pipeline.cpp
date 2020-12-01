@@ -27,8 +27,8 @@ TEST(ProcessablePipelineConceptTest, LRTest) {
 TEST(ProcessablePipelineConceptTest, RLTest) {
     decltype(auto) connection = Connection<int, int>{};
     decltype(auto) processable = 11 | connection;
-    std::cout << processable.process() << std::endl;
-    std::cout << (11 | connection).process() << std::endl;
+    std::cout << typeid(processable).name() << ":" << typeid(decltype(processable.process())).name() << ":" << processable.process() << std::endl;
+    std::cout << typeid(11 | connection).name() << ":" << typeid(decltype((11 | connection).process())).name() << ":" << (11 | connection).process() << std::endl;
     ASSERT_TRUE(processable.process());
     ASSERT_TRUE((11 | connection).process());
     decltype(auto) connection0 = Connection<bool, bool>{};
