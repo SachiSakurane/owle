@@ -18,8 +18,7 @@ namespace owle {
         }
 
         decltype(auto) process() {
-            return std::forward<ConnectionType>(connection).process(
-                std::forward<UnaryArgType>(arg));
+            return std::forward<ConnectionType>(connection).process(std::forward<UnaryArgType>(arg));
         }
 
     private:
