@@ -11,7 +11,8 @@ using namespace owle;
 
 TEST(ConnectablePipelineConceptTest, ConnectionTest) {
     decltype(auto) connection = Connection<long, int>{} | Connection<int, bool>{};
-    ASSERT_TRUE((static_cast<int>(1) | Connection<int, long>{}).process());
+    decltype(auto) value = static_cast<int>(1);
+    ASSERT_TRUE((value | Connection<int, long>{}).process());
     ASSERT_TRUE((static_cast<int>(1) | Connection<int, long>{}).process());
     ASSERT_TRUE((static_cast<long>(1) | connection).process());
 }
