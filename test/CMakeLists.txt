@@ -24,14 +24,14 @@ target_link_libraries(${TEST_PROJECT_NAME} PRIVATE
         ${GTEST_LIBRARY}
         ${GMOCK_LIBRARY})
 
-gtest_add_tests(
-        TARGET      ${TEST_PROJECT_NAME}
-        TEST_LIST   ${TEST_PROJECT_NAME}_Targets)
-
 target_include_directories(${TEST_PROJECT_NAME} PRIVATE
         ${GTEST_INCLUDE_DIRS}
         ${GMOCK_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+
+gtest_add_tests(
+        TARGET      ${TEST_PROJECT_NAME}
+        TEST_LIST   ${TEST_PROJECT_NAME}_Targets)
 
 # set each target to timeout if not finished within 10 sec
 set_tests_properties(${${TEST_PROJECT_NAME}_Targets} PROPERTIES TIMEOUT 10)
