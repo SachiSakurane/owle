@@ -20,9 +20,12 @@ jobs:
 
     - name: Build
       run: |
-        cmake -B ${BUILD_DIRECTORY} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++-10
-        cmake --build ${BUILD_DIRECTORY} --target ${REPOSITORY_NAME}_Test -j 4
+        cmake -B ${BUILD_DIRECTORY}_debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++-10
+        cmake --build ${BUILD_DIRECTORY}_debug --target ${REPOSITORY_NAME}_Test -j 4
+        cmake -B ${BUILD_DIRECTORY}_release -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++-10
+        cmake --build ${BUILD_DIRECTORY}_release --target ${REPOSITORY_NAME}_Test -j 4
 
     - name: Test
       run: |
-        ./${BUILD_DIRECTORY}/test/${REPOSITORY_NAME}_Test
+        ./${BUILD_DIRECTORY}_debug/test/${REPOSITORY_NAME}_Test
+        ./${BUILD_DIRECTORY}_release/test/${REPOSITORY_NAME}_Test
