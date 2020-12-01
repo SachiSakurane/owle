@@ -7,6 +7,8 @@
 template <class From, class To, class = std::enable_if_t<owle::convertible_to<From, To>>>
 struct Connection {
     To process(From v) {
+        std::cout << typeid(From).name() << ":" << v << std::endl;
+        std::cout << typeid(To).name() << ":" << static_cast<To>(v) << std::endl;
         return static_cast<To>(v);
     }
 };
