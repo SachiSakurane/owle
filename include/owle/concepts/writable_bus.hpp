@@ -13,9 +13,9 @@
 namespace owle {
 #ifdef __cpp_lib_concepts
     template <class WritableBusType>
-    concept WritableBus = owle::BaseBus<WritableBusType> && requires (WritableBusType& bus) {
+    concept WritableBus = owle::BaseBus<WritableBusType> && requires () {
         typename std::remove_cvref_t<WritableBusType>::SampleType;
-        {bus.getWritePointer(std::declval<int>())} ->
+        {std::declval<WritableBusType>().getWritePointer(std::declval<int>())} ->
             owle::convertible_to<typename std::remove_cvref_t<WritableBusType>::SampleType*>;
     };
 #else

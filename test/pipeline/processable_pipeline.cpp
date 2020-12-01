@@ -25,10 +25,12 @@ TEST(ProcessablePipelineConceptTest, LRTest) {
 }
 
 TEST(ProcessablePipelineConceptTest, RLTest) {
-    decltype(auto) connection = Connection<bool, bool>{};
-    decltype(auto) processable = true | connection;
+    decltype(auto) connection = Connection<int, bool>{};
+    int&& rvalue = 1;
+    std::cout << rvalue << std::endl;
+    decltype(auto) processable = rvalue | connection;
     ASSERT_TRUE(processable.process());
-    ASSERT_TRUE((true | connection).process());
+    ASSERT_TRUE((1 | connection).process());
 }
 
 TEST(ProcessablePipelineConceptTest, RRTest) {
