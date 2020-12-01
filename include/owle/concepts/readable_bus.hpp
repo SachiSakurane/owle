@@ -13,8 +13,10 @@
 namespace owle {
 #ifdef __cpp_lib_concepts
     template <class ReadableBusType>
-    concept ReadableBus = owle::BaseBus<ReadableBusType> && requires () {
-        typename std::remove_cvref_t<ReadableBusType>::SampleType;
+    concept ReadableBus =
+        owle::BaseBus<ReadableBusType> &&
+        std::is_object_v<typename std::remove_cvref_t<ReadableBusType>::SampleType> &&
+        requires () {
         {std::declval<ReadableBusType>().getReadPointer(std::declval<int>())} ->
             owle::same_as<const typename std::remove_cvref_t<ReadableBusType>::SampleType*>;
     };
@@ -27,7 +29,10 @@ namespace owle {
     }
 
     template <class ReadableBusType>
-    concept ReadableBus = owle::BaseBus<ReadableBusType> && detail::has_read_pointer_v<ReadableBusType>;
+    concept ReadableBus =
+        owle::BaseBus<ReadableBusType> &&
+        std::is_object_v<typename std::remove_cvref_t<ReadableBusType>::SampleType> &&
+        detail::has_read_pointer_v<ReadableBusType>;
 
 #endif
 }

@@ -7,6 +7,10 @@
 
 #include "mock_buses.hpp"
 
+namespace afcn {
+
+}
+
 bool StaticReadableBusTest() {
     static_assert(!owle::ReadableBus<BasicBaseBus>, "BasicBaseBus hasn't ReadableBus concept");
     static_assert(!owle::ReadableBus<MutableReadableBus<int>>, "MutableReadableBus<int> hasn't ReadableBus concept");
