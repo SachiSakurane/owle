@@ -31,6 +31,12 @@ target_include_directories(${TEST_PROJECT_NAME} PRIVATE
         ${GMOCK_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
+if (MSVC)
+    target_compile_options(${TEST_PROJECT_NAME} PRIVATE /W4 /WX /fsanitize=undefined)
+else ()
+    target_compile_options(${TEST_PROJECT_NAME} PRIVATE -Wall -W -fsanitize=undefined)
+endif()
+
 gtest_add_tests(
         TARGET      ${TEST_PROJECT_NAME}
         TEST_LIST   ${TEST_PROJECT_NAME}_Targets)
