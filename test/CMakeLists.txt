@@ -8,6 +8,12 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fsanitize=undefined")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
+endif()
+
 set(TEST_PROJECT_NAME ${CMAKE_PROJECT_NAME}_Test)
 
 add_executable(${TEST_PROJECT_NAME}
@@ -32,9 +38,9 @@ target_include_directories(${TEST_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 if (MSVC)
-    target_compile_options(${TEST_PROJECT_NAME} PRIVATE /W4 /WX /fsanitize=undefined)
+    target_compile_options(${TEST_PROJECT_NAME} PRIVATE /W4 /WX)
 else ()
-    target_compile_options(${TEST_PROJECT_NAME} PRIVATE -Wall -W -fsanitize=undefined)
+    target_compile_options(${TEST_PROJECT_NAME} PRIVATE -Wall -W)
 endif()
 
 gtest_add_tests(
