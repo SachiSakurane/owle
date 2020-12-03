@@ -31,6 +31,17 @@ target_link_libraries(${TEST_PROJECT_NAME} PRIVATE
         ${GTEST_LIBRARY}
         ${GMOCK_LIBRARY}
         pthread)
+if (MSVC)
+    target_link_libraries(${TEST_PROJECT_NAME} PRIVATE
+            ${GTEST_LIBRARY}
+            ${GMOCK_LIBRARY}
+            pthread.lib)
+else()
+    target_link_libraries(${TEST_PROJECT_NAME} PRIVATE
+            ${GTEST_LIBRARY}
+            ${GMOCK_LIBRARY}
+            pthread)
+endif()
 
 target_include_directories(${TEST_PROJECT_NAME} PRIVATE
         ${GTEST_INCLUDE_DIRS}
