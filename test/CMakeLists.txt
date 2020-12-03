@@ -31,8 +31,6 @@ target_include_directories(${TEST_PROJECT_NAME} PRIVATE
         ${GMOCK_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
-target_compile_options(${TEST_PROJECT_NAME} PUBLIC -Wall -W)
-
 gtest_add_tests(
         TARGET      ${TEST_PROJECT_NAME}
         TEST_LIST   ${TEST_PROJECT_NAME}_Targets)
