@@ -1,12 +1,18 @@
 cmake_minimum_required(VERSION 3.16)
 
-include(External_GTest.cmake)
-include(GoogleTest)
-find_package(Threads REQUIRED)
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+include(External_GTest.cmake)
+include(GoogleTest)
+
+if (MSVC)
+    option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
+    option(gtest_disable_pthreads "Disable uses of pthreads in gtest." ON)
+else()
+    find_package(Threads REQUIRED)
+endif()
 
 if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fsanitize=undefined")
