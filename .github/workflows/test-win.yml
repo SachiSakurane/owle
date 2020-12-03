@@ -19,17 +19,17 @@ jobs:
         submodules: recursive
 
     - name: Build
-      id: build
       shell: bash
       run: |
         cmake -B ${BUILD_DIRECTORY}
         cmake --build ${BUILD_DIRECTORY} --target ${REPOSITORY_NAME}_Test -j 4 --config Release
 
-    - name: test
-      if: failure() && steps.build.outcome == 'failure'
-      run: |
-        tree /f
-
     - name: Test
+      id: testing
       run: |
         ./${BUILD_DIRECTORY}/test/${REPOSITORY_NAME}_Test.exe
+
+    - name: test
+      if: failure() && steps.testing.outcome == 'failure'
+      run: |
+        tree /f
