@@ -19,10 +19,16 @@ jobs:
         submodules: recursive
 
     - name: Build
+      id: build
       shell: bash
       run: |
         cmake -B ${BUILD_DIRECTORY}
         cmake --build ${BUILD_DIRECTORY} --target ${REPOSITORY_NAME}_Test -j 4 --config Release
+
+    - name: test
+      if: failure() && steps.build.outcome == 'failure'
+      run: |
+        pwd; find . | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'
 
     - name: Test
       run: |
