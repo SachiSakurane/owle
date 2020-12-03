@@ -6,7 +6,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 if (MSVC)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
-else()
+endif()
 
 include(External_GTest.cmake)
 include(GoogleTest)
