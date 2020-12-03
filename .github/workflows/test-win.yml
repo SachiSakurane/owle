@@ -28,7 +28,7 @@ jobs:
     - name: test
       if: failure() && steps.build.outcome == 'failure'
       run: |
-        pwd; find . | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'
+        tree
 
     - name: Test
       run: |
