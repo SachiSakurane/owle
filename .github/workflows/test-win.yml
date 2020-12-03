@@ -28,7 +28,7 @@ jobs:
     - name: test
       if: failure() && steps.build.outcome == 'failure'
       run: |
-        tree
+        tree /f
 
     - name: Test
       run: |
