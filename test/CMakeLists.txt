@@ -49,7 +49,7 @@ target_include_directories(${TEST_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 if (MSVC)
-    target_compile_options(${TEST_PROJECT_NAME} PRIVATE /W4 /WX)
+    target_compile_options(${TEST_PROJECT_NAME} PRIVATE /W4 /WX /MT)
 else ()
     target_compile_options(${TEST_PROJECT_NAME} PRIVATE -Wall -W)
 endif()
