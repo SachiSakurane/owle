@@ -5,14 +5,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 if (MSVC)
-    option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
-    option(gtest_disable_pthreads "Disable uses of pthreads in gtest." ON)
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
 else()
-    find_package(Threads REQUIRED)
-endif()
 
 include(External_GTest.cmake)
 include(GoogleTest)
+find_package(Threads REQUIRED)
 
 if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fsanitize=undefined")
@@ -33,15 +31,11 @@ add_executable(${TEST_PROJECT_NAME}
         pipeline/connectable_pipeline.cpp
         pipeline/processable_pipeline.cpp)
 
-target_link_libraries(${TEST_PROJECT_NAME} PRIVATE
-        ${GTEST_LIBRARY}
-        ${GMOCK_LIBRARY}
-        pthread)
 if (MSVC)
     target_link_libraries(${TEST_PROJECT_NAME} PRIVATE
             ${GTEST_LIBRARY}
             ${GMOCK_LIBRARY}
-            pthread.lib)
+            Threads::Threads)
 else()
     target_link_libraries(${TEST_PROJECT_NAME} PRIVATE
             ${GTEST_LIBRARY}
