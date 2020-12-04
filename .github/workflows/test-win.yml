@@ -27,9 +27,4 @@ jobs:
     - name: Test
       id: testing
       run: |
-        ./${BUILD_DIRECTORY}/test/${REPOSITORY_NAME}_Test.exe
-
-    - name: test
-      if: failure() && steps.testing.outcome == 'failure'
-      run: |
-        tree /f
+        ./${BUILD_DIRECTORY}/test/Release/${REPOSITORY_NAME}_Test.exe
