@@ -25,5 +25,6 @@ jobs:
         cmake --build ${BUILD_DIRECTORY} --target ${REPOSITORY_NAME}_Test -j 4 --config Release
 
     - name: Test
+      shell: bash
       run: |
-        ./${BUILD_DIRECTORY}/test/${REPOSITORY_NAME}_Test.exe
+        ./${BUILD_DIRECTORY}/test/Release/${REPOSITORY_NAME}_Test.exe
