@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-18.04, ubuntu-20.04, macos-10.15, macos-11.0 ]
+        os: [ ubuntu-18.04, ubuntu-20.04, macos-10.15, macos-11.0, windows-2019 ]
     env:
       REPOSITORY_NAME: owle
       BUILD_DIRECTORY: cmake-build
@@ -33,7 +33,23 @@ jobs:
           cmake -B ${BUILD_DIRECTORY}_release -DCMAKE_BUILD_TYPE=Release
           cmake --build ${BUILD_DIRECTORY}_release --target ${REPOSITORY_NAME}_Test -j 4
 
+      - name: Build
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          cmake -B ${BUILD_DIRECTORY}_debug
+          cmake --build ${BUILD_DIRECTORY}_debug --target ${REPOSITORY_NAME}_Test -j 4 --config Debug
+          cmake -B ${BUILD_DIRECTORY}_release
+          cmake --build ${BUILD_DIRECTORY}_release --target ${REPOSITORY_NAME}_Test -j 4 --config Release
+
       - name: Test
+        if: runner.os == 'Linux' || runner.os == 'macOS'
         run: |
           ./${BUILD_DIRECTORY}_debug/test/${REPOSITORY_NAME}_Test
           ./${BUILD_DIRECTORY}_release/test/${REPOSITORY_NAME}_Test
+
+      - name: Test
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          ./${BUILD_DIRECTORY}/test/Release/${REPOSITORY_NAME}_Test.exe
