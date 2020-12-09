@@ -12,9 +12,7 @@ include(External_GTest.cmake)
 include(GoogleTest)
 find_package(Threads REQUIRED)
 
-if (MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fsanitize=undefined")
-else()
+if (NOT (MSVC))
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
 endif()
 

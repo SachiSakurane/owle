@@ -52,4 +52,5 @@ jobs:
         if: runner.os == 'Windows'
         shell: bash
         run: |
-          ./${BUILD_DIRECTORY}/test/Release/${REPOSITORY_NAME}_Test.exe
+          ./${BUILD_DIRECTORY}_debug/test/Debug/${REPOSITORY_NAME}_Test.exe
+          ./${BUILD_DIRECTORY}_release/test/Release/${REPOSITORY_NAME}_Test.exe
