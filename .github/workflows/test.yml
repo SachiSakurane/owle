@@ -32,6 +32,7 @@ jobs:
 
       - name: Build
         if: runner.os == 'Windows'
+        id: build_win
         shell: bash
         run: |
           cmake -B ${BUILD_DIRECTORY}_${{matrix.build_type}} -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
@@ -44,12 +45,11 @@ jobs:
 
       - name: Test Windows
         if: runner.os == 'Windows'
-        id: test_win
         shell: bash
         run: |
           ./${BUILD_DIRECTORY}_${{matrix.build_type}}/test/${{matrix.build_type}}/${REPOSITORY_NAME}_Test.exe
 
       - name: Fail Dump
-        if: runner.os == 'Windows' && failure() && steps.test_win.outcome == 'failure'
+        if: failure() && steps.build_win.outcome == 'failure'
         run: |
           tree /f
