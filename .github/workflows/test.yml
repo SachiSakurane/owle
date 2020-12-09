@@ -8,6 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-18.04, ubuntu-20.04, macos-10.15, macos-11.0, windows-2019 ]
+        build_type: [ Debug, Release ]
     env:
       REPOSITORY_NAME: owle
       BUILD_DIRECTORY: cmake-build
@@ -20,37 +21,29 @@ jobs:
       - name: Build Linux
         if: runner.os == 'Linux'
         run: |
-          cmake -B ${BUILD_DIRECTORY}_debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++-10
-          cmake --build ${BUILD_DIRECTORY}_debug --target ${REPOSITORY_NAME}_Test -j 4
-          cmake -B ${BUILD_DIRECTORY}_release -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++-10
-          cmake --build ${BUILD_DIRECTORY}_release --target ${REPOSITORY_NAME}_Test -j 4
+          cmake -B ${BUILD_DIRECTORY}_${{matrix.build_type}} -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DCMAKE_CXX_COMPILER=g++-10
+          cmake --build ${BUILD_DIRECTORY}_${{matrix.build_type}} --target ${REPOSITORY_NAME}_Test -j 4
 
       - name: Build macOS
         if: runner.os == 'macOS'
         run: |
-          cmake -B ${BUILD_DIRECTORY}_debug -DCMAKE_BUILD_TYPE=Debug
-          cmake --build ${BUILD_DIRECTORY}_debug --target ${REPOSITORY_NAME}_Test -j 4
-          cmake -B ${BUILD_DIRECTORY}_release -DCMAKE_BUILD_TYPE=Release
-          cmake --build ${BUILD_DIRECTORY}_release --target ${REPOSITORY_NAME}_Test -j 4
+          cmake -B ${BUILD_DIRECTORY}_${{matrix.build_type}} -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
+          cmake --build ${BUILD_DIRECTORY}_${{matrix.build_type}} --target ${REPOSITORY_NAME}_Test -j 4
 
       - name: Build
         if: runner.os == 'Windows'
         shell: bash
         run: |
-          cmake -B ${BUILD_DIRECTORY}_debug
-          cmake --build ${BUILD_DIRECTORY}_debug --target ${REPOSITORY_NAME}_Test -j 4 --config Debug
-          cmake -B ${BUILD_DIRECTORY}_release
-          cmake --build ${BUILD_DIRECTORY}_release --target ${REPOSITORY_NAME}_Test -j 4 --config Release
+          cmake -B ${BUILD_DIRECTORY}_${{matrix.build_type}}
+          cmake --build ${BUILD_DIRECTORY}_${{matrix.build_type}} --target ${REPOSITORY_NAME}_Test -j 4 --config ${{matrix.build_type}}
 
       - name: Test
         if: runner.os == 'Linux' || runner.os == 'macOS'
         run: |
-          ./${BUILD_DIRECTORY}_debug/test/${REPOSITORY_NAME}_Test
-          ./${BUILD_DIRECTORY}_release/test/${REPOSITORY_NAME}_Test
+          ./${BUILD_DIRECTORY}_${{matrix.build_type}}/test/${REPOSITORY_NAME}_Test
 
       - name: Test
         if: runner.os == 'Windows'
         shell: bash
         run: |
-          ./${BUILD_DIRECTORY}_debug/test/Debug/${REPOSITORY_NAME}_Test.exe
-          ./${BUILD_DIRECTORY}_release/test/Release/${REPOSITORY_NAME}_Test.exe
+          ./${BUILD_DIRECTORY}_${{matrix.build_type}}/test/${{matrix.build_type}}/${REPOSITORY_NAME}_Test.exe
