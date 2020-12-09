@@ -1,0 +1,31 @@
+name: Test CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-18.04, ubuntu-20.04 ]
+    env:
+      REPOSITORY_NAME: owle
+      BUILD_DIRECTORY: cmake-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Build Linux
+        if: runner.os == 'Linux'
+        run: |
+          cmake -B ${BUILD_DIRECTORY}_debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++-10
+          cmake --build ${BUILD_DIRECTORY}_debug --target ${REPOSITORY_NAME}_Test -j 4
+          cmake -B ${BUILD_DIRECTORY}_release -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++-10
+          cmake --build ${BUILD_DIRECTORY}_release --target ${REPOSITORY_NAME}_Test -j 4
+
+      - name: Test
+        run: |
+          ./${BUILD_DIRECTORY}_debug/test/${REPOSITORY_NAME}_Test
+          ./${BUILD_DIRECTORY}_release/test/${REPOSITORY_NAME}_Test
