@@ -34,7 +34,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: bash
         run: |
-          cmake -B ${BUILD_DIRECTORY}_${{matrix.build_type}}
+          cmake -B ${BUILD_DIRECTORY}_${{matrix.build_type}} -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
           cmake --build ${BUILD_DIRECTORY}_${{matrix.build_type}} --target ${REPOSITORY_NAME}_Test -j 4 --config ${{matrix.build_type}}
 
       - name: Test
