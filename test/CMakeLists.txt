@@ -12,9 +12,7 @@ include(External_GTest.cmake)
 include(GoogleTest)
 find_package(Threads REQUIRED)
 
-if (MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fsanitize=undefined")
-else()
+if (NOT (MSVC))
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
 endif()
 
@@ -49,7 +47,11 @@ target_include_directories(${TEST_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 if (MSVC)
-    target_compile_options(${TEST_PROJECT_NAME} PRIVATE /W4 /WX /MT)
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        target_compile_options(${TEST_PROJECT_NAME} PRIVATE /W4 /WX /MTd)
+    else()
+        target_compile_options(${TEST_PROJECT_NAME} PRIVATE /W4 /WX /MT)
+    endif()
 else ()
     target_compile_options(${TEST_PROJECT_NAME} PRIVATE -Wall -W)
 endif()

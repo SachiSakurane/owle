@@ -15,9 +15,9 @@ set(GTEST_INCLUDE_DIRS ${source_dir}/googletest/include)
 set(GMOCK_INCLUDE_DIRS ${source_dir}/googlemock/include)
 
 if(MSVC)
-    set(GOOGLE_LIBRARY_POSTFIX lib)
+    set(GOOGLE_LIBRARY_EXTENSION lib)
 else()
-    set(GOOGLE_LIBRARY_POSTFIX a)
+    set(GOOGLE_LIBRARY_EXTENSION a)
 endif()
 
 # The cloning of the above repo doesn't happen until make, however if the dir doesn't
@@ -29,11 +29,16 @@ file(MAKE_DIRECTORY ${GMOCK_INCLUDE_DIRS})
 ExternalProject_Get_Property(googletest binary_dir)
 
 if(MSVC)
-    set(BINARY_DIR_EXTRA_PATH lib/Release)
+    set(BINARY_DIR_EXTRA_PATH lib/${CMAKE_BUILD_TYPE})
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(BINARY_SUFFIX d)
+    else()
+        set(BINARY_SUFFIX)
+    endif()
 else()
     set(BINARY_DIR_EXTRA_PATH lib)
 endif()
-set(GTEST_LIBRARY_PATH ${binary_dir}/${BINARY_DIR_EXTRA_PATH}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest.${GOOGLE_LIBRARY_POSTFIX})
+set(GTEST_LIBRARY_PATH ${binary_dir}/${BINARY_DIR_EXTRA_PATH}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${BINARY_SUFFIX}.${GOOGLE_LIBRARY_EXTENSION})
 set(GTEST_LIBRARY gtest)
 add_library(${GTEST_LIBRARY} UNKNOWN IMPORTED)
 set_target_properties(${GTEST_LIBRARY} PROPERTIES
@@ -42,7 +47,7 @@ set_target_properties(${GTEST_LIBRARY} PROPERTIES
         "INTERFACE_INCLUDE_DIRECTORIES" "${GTEST_INCLUDE_DIRS}")
 add_dependencies(${GTEST_LIBRARY} googletest)
 
-set(GTEST_MAIN_LIBRARY_PATH ${binary_dir}/${BINARY_DIR_EXTRA_PATH}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main.${GOOGLE_LIBRARY_POSTFIX})
+set(GTEST_MAIN_LIBRARY_PATH ${binary_dir}/${BINARY_DIR_EXTRA_PATH}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${BINARY_SUFFIX}.${GOOGLE_LIBRARY_EXTENSION})
 set(GTEST_MAIN_LIBRARY gtest_main)
 add_library(${GTEST_MAIN_LIBRARY} UNKNOWN IMPORTED)
 set_target_properties(${GTEST_MAIN_LIBRARY} PROPERTIES
@@ -51,7 +56,7 @@ set_target_properties(${GTEST_MAIN_LIBRARY} PROPERTIES
         "INTERFACE_INCLUDE_DIRECTORIES" "${GTEST_INCLUDE_DIRS}")
 add_dependencies(${GTEST_MAIN_LIBRARY} googletest)
 
-set(GMOCK_LIBRARY_PATH ${binary_dir}/${BINARY_DIR_EXTRA_PATH}/${CMAKE_FIND_LIBRARY_PREFIXES}gmock.${GOOGLE_LIBRARY_POSTFIX})
+set(GMOCK_LIBRARY_PATH ${binary_dir}/${BINARY_DIR_EXTRA_PATH}/${CMAKE_FIND_LIBRARY_PREFIXES}gmock${BINARY_SUFFIX}.${GOOGLE_LIBRARY_EXTENSION})
 set(GMOCK_LIBRARY gmock)
 add_library(${GMOCK_LIBRARY} UNKNOWN IMPORTED)
 set_target_properties(${GMOCK_LIBRARY} PROPERTIES
@@ -60,7 +65,7 @@ set_target_properties(${GMOCK_LIBRARY} PROPERTIES
         "INTERFACE_INCLUDE_DIRECTORIES" "${GMOCK_INCLUDE_DIRS}")
 add_dependencies(${GMOCK_LIBRARY} googletest)
 
-set(GMOCK_MAIN_LIBRARY_PATH ${binary_dir}/${BINARY_DIR_EXTRA_PATH}/${CMAKE_FIND_LIBRARY_PREFIXES}gmock_main.${GOOGLE_LIBRARY_POSTFIX})
+set(GMOCK_MAIN_LIBRARY_PATH ${binary_dir}/${BINARY_DIR_EXTRA_PATH}/${CMAKE_FIND_LIBRARY_PREFIXES}gmock_main${BINARY_SUFFIX}.${GOOGLE_LIBRARY_EXTENSION})
 set(GMOCK_MAIN_LIBRARY gmock_main)
 add_library(${GMOCK_MAIN_LIBRARY} UNKNOWN IMPORTED)
 set_target_properties(${GMOCK_MAIN_LIBRARY} PROPERTIES
