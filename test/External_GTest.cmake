@@ -29,7 +29,7 @@ file(MAKE_DIRECTORY ${GMOCK_INCLUDE_DIRS})
 ExternalProject_Get_Property(googletest binary_dir)
 
 if(MSVC)
-    set(BINARY_DIR_EXTRA_PATH lib/${CMAKE_BUILD_TYPE})
+    set(BINARY_DIR_EXTRA_PATH lib/${BUILD_TYPE})
 else()
     set(BINARY_DIR_EXTRA_PATH lib)
 endif()
