@@ -39,18 +39,17 @@ jobs:
 
       - name: Test
         if: runner.os == 'Linux' || runner.os == 'macOS'
-        id: testing
         run: |
           ./${BUILD_DIRECTORY}_${{matrix.build_type}}/test/${REPOSITORY_NAME}_Test
 
       - name: Test Windows
         if: runner.os == 'Windows'
-        id: testing
+        id: test_win
         shell: bash
         run: |
           ./${BUILD_DIRECTORY}_${{matrix.build_type}}/test/${{matrix.build_type}}/${REPOSITORY_NAME}_Test.exe
 
       - name: Fail Dump
-        if: runner.os == 'Windows' && failure() && steps.testing.outcome == 'failure'
+        if: runner.os == 'Windows' && failure() && steps.test_win.outcome == 'failure'
         run: |
           tree /f
