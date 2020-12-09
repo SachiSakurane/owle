@@ -7,8 +7,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-18.04, ubuntu-20.04, macos-10.15, macos-11.0, windows-2019 ]
-        build_type: [ Debug, Release ]
+        os: [ windows-2019, ubuntu-18.04, ubuntu-20.04, macos-10.15, macos-11.0 ]
+        build_type: [ Release ]
     env:
       REPOSITORY_NAME: owle
       BUILD_DIRECTORY: cmake-build
