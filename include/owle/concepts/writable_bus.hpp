@@ -14,19 +14,19 @@ namespace owle {
 #ifdef __cpp_lib_concepts
     template <class WritableBusType>
     concept WritableBus = owle::BaseBus<WritableBusType> && requires () {
-        typename std::remove_cvref_t<WritableBusType>::SampleType;
-        {std::declval<WritableBusType>().getWritePointer(std::declval<int>())} ->
-            owle::convertible_to<typename std::remove_cvref_t<WritableBusType>::SampleType*>;
+        typename std::remove_cvref_t<WritableBusType>::value_type;
+        {std::declval<WritableBusType>().data(std::declval<size_t>())} ->
+            owle::convertible_to<typename std::remove_cvref_t<WritableBusType>::value_type*>;
     };
 #else
     namespace detail {
-        OWLE_HAS_SINGLE_TYPE_CLASS_MEMBER(has_write_pointer,
+        OWLE_HAS_SINGLE_TYPE_CLASS_MEMBER(has_writable_data,
                                           (owle::convertible_to<
-                                              decltype(std::declval<Type>().getWritePointer(std::declval<int>())),
-                                              typename std::remove_volatile_t<std::remove_reference_t<Type>>::SampleType*>))
+                                              decltype(std::declval<Type>().data(std::declval<size_t>())),
+                                              typename std::remove_volatile_t<std::remove_reference_t<Type>>::value_type*>))
     }
 
     template <class WritableBusType>
-    concept WritableBus = owle::BaseBus<WritableBusType> && detail::has_write_pointer_v<WritableBusType>;
+    concept WritableBus = owle::BaseBus<WritableBusType> && detail::has_writable_data_v<WritableBusType>;
 #endif
 }

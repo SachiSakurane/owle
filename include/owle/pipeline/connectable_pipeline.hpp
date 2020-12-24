@@ -12,8 +12,8 @@ namespace owle {
         template <class Type> requires
             owle::Connectable<LeftType, Type> &&
             owle::ProcessConnectable<RightType, decltype(std::declval<Type>() | std::declval<LeftType>())>
-        decltype(auto) process(Type&& value) {
-            return std::forward<RightType>(right).process((std::forward<Type>(value) | std::forward<LeftType>(left)).process());
+        decltype(auto) operator()(Type&& value) {
+            return (std::forward<Type>(value) | std::forward<LeftType>(left) | std::forward<RightType>(right))();
         }
 
         LeftType&& left;
