@@ -20,13 +20,13 @@ namespace owle {
     };
 #else
     namespace detail {
-        OWLE_HAS_SINGLE_TYPE_CLASS_MEMBER(has_writable_data,
+        OWLE_HAS_SINGLE_TYPE_CLASS_MEMBER(has_data,
                                           (owle::convertible_to<
                                               decltype(std::declval<Type>().data(std::declval<size_t>())),
                                               typename std::remove_volatile_t<std::remove_reference_t<Type>>::value_type*>))
     }
 
     template <class WritableBusType>
-    concept WritableBus = owle::BaseBus<WritableBusType> && detail::has_writable_data_v<WritableBusType>;
+    concept WritableBus = owle::BaseBus<WritableBusType> && detail::has_data_v<WritableBusType>;
 #endif
 }
