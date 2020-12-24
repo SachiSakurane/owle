@@ -15,7 +15,7 @@ namespace owle {
     template <class ReadableBusType>
     concept ReadableBus = owle::BaseBus<ReadableBusType> && requires () {
         typename std::remove_cvref_t<ReadableBusType>::value_type;
-        {std::declval<ReadableBusType>().data(std::declval<size_t>())} ->
+        {std::declval<const std::remove_cvref_t<ReadableBusType>>().data(std::declval<size_t>())} ->
             owle::same_as<const typename std::remove_cvref_t<ReadableBusType>::value_type*>;
     };
 #else
