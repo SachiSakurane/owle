@@ -23,7 +23,7 @@ namespace owle {
         OWLE_HAS_SINGLE_TYPE_CLASS_MEMBER(has_const_data,
                                           (owle::same_as<
                                               const typename std::remove_cvref_t<Type>::value_type*,
-                                              decltype(std::declval<std::add_const<Type>>().data(std::declval<size_t>()))>))
+                                              decltype(std::declval<const std::remove_cvref_t<Type>>().data(std::declval<size_t>()))>))
     }
 
     template <class ReadableBusType>
