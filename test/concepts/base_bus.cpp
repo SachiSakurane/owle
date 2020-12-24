@@ -8,13 +8,13 @@
 #include "mock_buses.hpp"
 
 struct MissGetNumChannelsBaseBus {
-    void getNumChannels() const;
-    size_t getNumSamples() const;
+    void channel() const;
+    size_t size() const;
 };
 
 struct MissGetNumSamplesBaseBus {
-    size_t getNumChannels() const;
-    void getNumSamples() const;
+    size_t channel() const;
+    void size() const;
 };
 
 bool BaseBusStaticTest() {

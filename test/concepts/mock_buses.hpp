@@ -5,47 +5,47 @@
 #pragma once
 
 struct BasicBaseBus {
-    size_t getNumChannels() const;
-    size_t getNumSamples() const;
+    size_t channel() const;
+    size_t size() const;
 };
 
 template <class Type>
 struct MutableReadableBus : BasicBaseBus {
-    using SampleType = Type;
-    SampleType* getReadPointer(int);
+    using value_type = Type;
+    value_type* data(size_t);
 };
 
 template <class Type>
 struct ImmutableReadableBus : BasicBaseBus {
-    using SampleType = Type;
-    const SampleType* getReadPointer(int) const;
+    using value_type = Type;
+    const value_type* data(size_t) const;
 };
 
 template <class Type>
 struct MutableWritableBus : BasicBaseBus {
-    using SampleType = Type;
-    SampleType* getWritePointer(int);
+    using value_type = Type;
+    value_type* data(size_t);
 };
 
 template <class Type>
 struct ImmutableWritableBus : BasicBaseBus {
-    using SampleType = Type;
-    const SampleType* getWritePointer(int) const;
+    using value_type = Type;
+    const value_type* data(size_t) const;
 };
 
 template <class Type>
 struct BidirectionalBus : BasicBaseBus {
-    using SampleType = Type;
-    const SampleType* getReadPointer(int) const;
-    SampleType* getWritePointer(int);
+    using value_type = Type;
+    const value_type* data(size_t) const;
+    value_type* data(size_t);
 };
 
 template <class From, class To>
 struct Connection {
-    To process(From v);
+    To operator()(From v);
 };
 
 template <class Type>
 struct Process {
-    Type process();
+    Type operator()();
 };

@@ -6,12 +6,12 @@
 
 template <class From, class To, class = std::enable_if_t<owle::convertible_to<From, To>>>
 struct Connection {
-    To process(From v) {
+    To operator()(From v) {
         return static_cast<To>(v);
     }
 };
 
 template <class Type, Type Value>
 struct Process {
-    Type process() { return Value; }
+    Type operator()() { return Value; }
 };

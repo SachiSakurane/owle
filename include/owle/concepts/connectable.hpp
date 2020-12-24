@@ -13,12 +13,12 @@ namespace owle {
 #ifdef __cpp_lib_concepts
     template <class ConnectableType, class ArgumentType>
     concept ArgsConnectable = requires () {
-        std::declval<ConnectableType>().process(std::declval<ArgumentType>());
+        std::declval<ConnectableType>()(std::declval<ArgumentType>());
     };
 
     template <class ConnectionType, class ProcessableType>
     concept ProcessConnectable = requires () {
-        std::declval<ConnectionType>().process(std::declval<ProcessableType>().process());
+        std::declval<ConnectionType>()(std::declval<ProcessableType>()());
     };
 
     template <class ConnectionType, class Type>
@@ -30,7 +30,7 @@ namespace owle {
 
         template<class ConnectableType, class ArgumentType>
         struct has_connectable_impl<ConnectableType, ArgumentType,
-                std::enable_if_t<owle::sfinae_true<decltype(std::declval<ConnectableType>().process(std::declval<ArgumentType>()))>::value>> :
+                std::enable_if_t<owle::sfinae_true<decltype(std::declval<ConnectableType>()(std::declval<ArgumentType>()))>::value>> :
                 std::true_type {};
 
         template <class ConnectableType, class ArgumentType>
@@ -38,7 +38,7 @@ namespace owle {
 
         template <class ConnectableType, class ProcessableType> requires owle::Processable<ProcessableType>
         struct has_process_connectable :
-            has_connectable_impl<ConnectableType, decltype(std::declval<ProcessableType>().process())> {};
+            has_connectable_impl<ConnectableType, decltype(std::declval<ProcessableType>()())> {};
 
         template <class ConnectableType, class ArgumentType>
         inline constexpr bool has_args_connectable_v = has_args_connectable<ConnectableType, ArgumentType>::value;

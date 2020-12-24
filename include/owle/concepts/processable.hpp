@@ -14,11 +14,11 @@ namespace owle {
 #ifdef __cpp_lib_concepts
     template <class ProcessableType>
     concept Processable = requires () {
-        std::declval<ProcessableType>().process();
+        std::declval<ProcessableType>()();
     };
 #else
     namespace detail {
-        OWLE_HAS_CLASS_VOID_MEMBER(has_process, process)
+        OWLE_HAS_CLASS_VOID_MEMBER(has_process, operator())
     }
 
     template <class ProcessableType>
