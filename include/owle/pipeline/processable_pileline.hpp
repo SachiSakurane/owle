@@ -7,7 +7,7 @@
 
 namespace owle {
 template <class ConnectionType, class UnaryArgType>
-struct ProcessableBinder {
+struct processable_binder {
   decltype(auto) operator()() {
     return std::forward<ConnectionType>(connection)(std::forward<UnaryArgType>(arg));
   }
@@ -17,7 +17,7 @@ struct ProcessableBinder {
 };
 
 template <class ConnectionType, owle::scalar UnaryArgType>
-struct ProcessableBinder<ConnectionType, UnaryArgType> {
+struct processable_binder<ConnectionType, UnaryArgType> {
   decltype(auto) operator()() { return std::forward<ConnectionType>(connection)(arg); }
 
   ConnectionType &&connection;
@@ -26,7 +26,7 @@ struct ProcessableBinder<ConnectionType, UnaryArgType> {
 
 template <class ConnectionType, class ProcessableType>
 requires owle::processable<ProcessableType> && process_connectable<ConnectionType, ProcessableType>
-struct ProcessableBinder<ConnectionType, ProcessableType> {
+struct processable_binder<ConnectionType, ProcessableType> {
   decltype(auto) operator()() {
     return std::forward<ConnectionType>(connection)(std::forward<ProcessableType>(processable)());
   }
@@ -39,7 +39,7 @@ struct ProcessableBinder<ConnectionType, ProcessableType> {
 template <class Type, class ConnectionType>
 requires owle::args_connectable<ConnectionType, Type>
 inline decltype(auto) operator|(Type &&value, ConnectionType &&connection) {
-  return owle::ProcessableBinder<ConnectionType, Type>{std::forward<ConnectionType>(connection),
+  return owle::processable_binder<ConnectionType, Type>{std::forward<ConnectionType>(connection),
                                                        std::forward<Type>(value)};
 }
 
@@ -48,7 +48,7 @@ template <class ProcessableType, class ConnectionType>
 requires owle::processable<ProcessableType> &&
     owle::process_connectable<ConnectionType, ProcessableType>
 inline decltype(auto) operator|(ProcessableType &&processable, ConnectionType &&connection) {
-  return owle::ProcessableBinder<ConnectionType, ProcessableType>{
+  return owle::processable_binder<ConnectionType, ProcessableType>{
       std::forward<ConnectionType>(connection), std::forward<ProcessableType>(processable)};
 }
 } // namespace owle

@@ -4,7 +4,7 @@
 
 namespace owle {
 template <class ProcessableType>
-concept processable = requires() {
-  std::declval<ProcessableType>()();
+concept processable = requires(ProcessableType &p) {
+  p();
 };
 } // namespace owle
