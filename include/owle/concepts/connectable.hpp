@@ -11,7 +11,8 @@ concept args_connectable = requires(ConnectableType &c, ArgumentType &arg) {
 };
 
 template <class ConnectionType, class ProcessableType>
-concept process_connectable = requires(ConnectionType &c, ProcessableType &p) {
+concept process_connectable = owle::processable<ProcessableType> &&
+    requires(ConnectionType &c, ProcessableType &p) {
   c(p());
 };
 
