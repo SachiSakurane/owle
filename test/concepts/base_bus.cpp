@@ -4,11 +4,11 @@
 
 struct MissGetNumChannelsBaseBus {
   void channel() const;
-  size_t size() const;
+  std::size_t size() const;
 };
 
 struct MissGetNumSamplesBaseBus {
-  size_t channel() const;
+  std::size_t channel() const;
   void size() const;
 };
 
