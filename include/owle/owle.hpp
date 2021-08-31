@@ -4,5 +4,5 @@
 
 #pragma once
 
-#include <owle/concepts/concepts.hpp>
-#include <owle/pipeline/pipeline.hpp>
+#include <owle/concepts.hpp>
+#include <owle/pipeline.hpp>
