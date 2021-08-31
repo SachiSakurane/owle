@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-18.04, ubuntu-20.04, macos-10.15, macos-11.0, windows-2019 ]
+        os: [ ubuntu-18.04, ubuntu-20.04, macos-11, windows-latest ]
         build_type: [ Debug, Release ]
     env:
       REPOSITORY_NAME: owle
@@ -23,13 +23,11 @@ jobs:
         run: |
           cmake -B ${BUILD_DIRECTORY}_${{matrix.build_type}} -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DCMAKE_CXX_COMPILER=g++-10
           cmake --build ${BUILD_DIRECTORY}_${{matrix.build_type}} --target ${REPOSITORY_NAME}_Test -j 4
-
       - name: Build macOS
         if: runner.os == 'macOS'
         run: |
           cmake -B ${BUILD_DIRECTORY}_${{matrix.build_type}} -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
           cmake --build ${BUILD_DIRECTORY}_${{matrix.build_type}} --target ${REPOSITORY_NAME}_Test -j 4
-
       - name: Build
         if: runner.os == 'Windows'
         id: build_win
@@ -37,18 +35,15 @@ jobs:
         run: |
           cmake -B ${BUILD_DIRECTORY}_${{matrix.build_type}} -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
           cmake --build ${BUILD_DIRECTORY}_${{matrix.build_type}} --target ${REPOSITORY_NAME}_Test -j 4 --config ${{matrix.build_type}}
-
       - name: Test
         if: runner.os == 'Linux' || runner.os == 'macOS'
         run: |
           ./${BUILD_DIRECTORY}_${{matrix.build_type}}/test/${REPOSITORY_NAME}_Test
-
       - name: Test Windows
         if: runner.os == 'Windows'
         shell: bash
         run: |
           ./${BUILD_DIRECTORY}_${{matrix.build_type}}/test/${{matrix.build_type}}/${REPOSITORY_NAME}_Test.exe
-
       - name: Fail Dump
         if: failure() && steps.build_win.outcome == 'failure'
         run: |
