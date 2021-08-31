@@ -1,16 +1,11 @@
-#include <gtest/gtest.h>
 #include <owle/concepts/writable_bus.hpp>
 
 #include "mock_buses.hpp"
 
-bool StaticWritableBusTest() {
-  static_assert(!owle::WritableBus<BasicBaseBus>, "BasicBaseBus hasn't WritableBus concept");
-  static_assert(owle::WritableBus<MutableWritableBus<int>>,
-                "MutableReadableBus<int> has WritableBus concept");
-  static_assert(!owle::WritableBus<ImmutableWritableBus<int>>,
-                "ImmutableReadableBus<int> hasn't WritableBus concept");
-
-  return true;
-}
-
-TEST(WritableBusConceptTest, StaticTest) { ASSERT_TRUE(StaticWritableBusTest()); }
+namespace {
+static_assert(!owle::writable_bus<BasicBaseBus>, "BasicBaseBus hasn't WritableBus concept");
+static_assert(owle::writable_bus<MutableWritableBus<int>>,
+              "MutableReadableBus<int> has WritableBus concept");
+static_assert(!owle::writable_bus<ImmutableWritableBus<int>>,
+              "ImmutableReadableBus<int> hasn't WritableBus concept");
+} // namespace

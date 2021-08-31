@@ -6,5 +6,5 @@
 namespace owle {
 template <class BidirectionalBusType>
 concept BidirectionalBus =
-    owle::ReadableBus<BidirectionalBusType> && owle::WritableBus<BidirectionalBusType>;
+    owle::readable_bus<BidirectionalBusType> && owle::writable_bus<BidirectionalBusType>;
 }

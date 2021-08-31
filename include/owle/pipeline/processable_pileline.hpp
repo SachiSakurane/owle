@@ -3,9 +3,10 @@
 #include <owle/concepts/connectable.hpp>
 #include <owle/concepts/processable.hpp>
 #include <owle/concepts/readable_bus.hpp>
+#include <owle/utility/scalar.hpp>
 
 namespace owle {
-template <class ConnectionType, class UnaryArgType, class = void>
+template <class ConnectionType, class UnaryArgType>
 struct ProcessableBinder {
   decltype(auto) operator()() {
     return std::forward<ConnectionType>(connection)(std::forward<UnaryArgType>(arg));
@@ -15,9 +16,8 @@ struct ProcessableBinder {
   UnaryArgType &&arg;
 };
 
-template <class ConnectionType, class UnaryArgType>
-struct ProcessableBinder<ConnectionType, UnaryArgType,
-                         std::enable_if_t<std::is_scalar_v<UnaryArgType>>> {
+template <class ConnectionType, owle::scalar UnaryArgType>
+struct ProcessableBinder<ConnectionType, UnaryArgType> {
   decltype(auto) operator()() { return std::forward<ConnectionType>(connection)(arg); }
 
   ConnectionType &&connection;
@@ -25,9 +25,8 @@ struct ProcessableBinder<ConnectionType, UnaryArgType,
 };
 
 template <class ConnectionType, class ProcessableType>
-struct ProcessableBinder<ConnectionType, ProcessableType,
-                         std::enable_if_t<owle::Processable<ProcessableType> &&
-                                          ProcessConnectable<ConnectionType, ProcessableType>>> {
+requires owle::processable<ProcessableType> && process_connectable<ConnectionType, ProcessableType>
+struct ProcessableBinder<ConnectionType, ProcessableType> {
   decltype(auto) operator()() {
     return std::forward<ConnectionType>(connection)(std::forward<ProcessableType>(processable)());
   }
@@ -38,7 +37,7 @@ struct ProcessableBinder<ConnectionType, ProcessableType,
 
 // connection.process(value)
 template <class Type, class ConnectionType>
-requires owle::ArgsConnectable<ConnectionType, Type>
+requires owle::args_connectable<ConnectionType, Type>
 inline decltype(auto) operator|(Type &&value, ConnectionType &&connection) {
   return owle::ProcessableBinder<ConnectionType, Type>{std::forward<ConnectionType>(connection),
                                                        std::forward<Type>(value)};
@@ -46,8 +45,8 @@ inline decltype(auto) operator|(Type &&value, ConnectionType &&connection) {
 
 // connection.process(processable.process())
 template <class ProcessableType, class ConnectionType>
-requires owle::Processable<ProcessableType> &&
-    owle::ProcessConnectable<ConnectionType, ProcessableType>
+requires owle::processable<ProcessableType> &&
+    owle::process_connectable<ConnectionType, ProcessableType>
 inline decltype(auto) operator|(ProcessableType &&processable, ConnectionType &&connection) {
   return owle::ProcessableBinder<ConnectionType, ProcessableType>{
       std::forward<ConnectionType>(connection), std::forward<ProcessableType>(processable)};

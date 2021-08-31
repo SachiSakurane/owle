@@ -1,8 +1,10 @@
 #pragma once
 
+#include <utility>
+
 namespace owle {
 template <class ProcessableType>
-concept Processable = requires() {
+concept processable = requires() {
   std::declval<ProcessableType>()();
 };
 } // namespace owle

@@ -1,4 +1,3 @@
-#include <gtest/gtest.h>
 #include <owle/concepts/base_bus.hpp>
 
 #include "mock_buses.hpp"
@@ -13,12 +12,8 @@ struct MissGetNumSamplesBaseBus {
   void size() const;
 };
 
-bool BaseBusStaticTest() {
-  static_assert(owle::BaseBus<BasicBaseBus>, "BasicBaseBus has BaseBus concept");
-  static_assert(!owle::BaseBus<MissGetNumChannelsBaseBus>, "getNumChannels hasn't BaseBus concept");
-  static_assert(!owle::BaseBus<MissGetNumSamplesBaseBus>, "getNumSamples hasn't BaseBus concept");
-
-  return true;
-}
-
-TEST(BaseBusConceptTest, StaticTest) { ASSERT_TRUE(BaseBusStaticTest()); }
+namespace {
+static_assert(owle::base_bus<BasicBaseBus>, "BasicBaseBus has BaseBus concept");
+static_assert(!owle::base_bus<MissGetNumChannelsBaseBus>, "getNumChannels hasn't BaseBus concept");
+static_assert(!owle::base_bus<MissGetNumSamplesBaseBus>, "getNumSamples hasn't BaseBus concept");
+} // namespace

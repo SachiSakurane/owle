@@ -5,7 +5,7 @@
 
 namespace owle {
 template <class WritableBusType>
-concept WritableBus = owle::BaseBus<WritableBusType> && requires() {
+concept writable_bus = owle::base_bus<WritableBusType> && requires() {
   typename std::remove_cvref_t<WritableBusType>::value_type;
   {
     std::declval<WritableBusType>().data(std::declval<size_t>())

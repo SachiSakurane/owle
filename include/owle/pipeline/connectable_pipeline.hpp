@@ -6,8 +6,8 @@ namespace owle {
 template <class LeftType, class RightType>
 struct ConnectableBinder {
   template <class Type>
-  requires owle::Connectable<LeftType, Type> &&
-      owle::ProcessConnectable<RightType, decltype(std::declval<Type>() | std::declval<LeftType>())>
+  requires owle::connectable<LeftType, Type> &&
+      owle::process_connectable<RightType, decltype(std::declval<Type>() | std::declval<LeftType>())>
   decltype(auto) operator()(Type &&value) {
     return (std::forward<Type>(value) | std::forward<LeftType>(left) |
             std::forward<RightType>(right))();
@@ -19,7 +19,7 @@ struct ConnectableBinder {
 
 // right.process(left.process(value))
 template <class LeftType, class RightType,
-          class = std::enable_if_t<!owle::Connectable<RightType, LeftType>>>
+          class = std::enable_if_t<!owle::connectable<RightType, LeftType>>>
 inline decltype(auto) operator|(LeftType &&left, RightType &&right) {
   return owle::ConnectableBinder<LeftType, RightType>{std::forward<LeftType>(left),
                                                       std::forward<RightType>(right)};

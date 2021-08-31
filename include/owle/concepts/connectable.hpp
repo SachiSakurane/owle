@@ -6,16 +6,16 @@
 
 namespace owle {
 template <class ConnectableType, class ArgumentType>
-concept ArgsConnectable = requires() {
+concept args_connectable = requires() {
   std::declval<ConnectableType>()(std::declval<ArgumentType>());
 };
 
 template <class ConnectionType, class ProcessableType>
-concept ProcessConnectable = requires() {
+concept process_connectable = requires() {
   std::declval<ConnectionType>()(std::declval<ProcessableType>()());
 };
 
 template <class ConnectionType, class Type>
-concept Connectable =
-    ArgsConnectable<ConnectionType, Type> || ProcessConnectable<ConnectionType, Type>;
+concept connectable =
+    args_connectable<ConnectionType, Type> || process_connectable<ConnectionType, Type>;
 } // namespace owle
