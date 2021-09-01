@@ -8,9 +8,9 @@ static_assert(owle::args_connectable<Connection<int, bool>, int>,
 static_assert(!owle::args_connectable<Connection<int, bool>, void>,
               "<Connection<int, bool>, void> hasn't ArgsConnectable concept");
 
-static_assert(owle::process_connectable<Connection<int, bool>, Apply<int>>,
+static_assert(owle::apply_connectable<Connection<int, bool>, Apply<int>>,
               "<Connection<int, bool>, Process<int>> has ProcessConnectable concept");
-static_assert(!owle::process_connectable<Connection<int, bool>, Apply<void>>,
+static_assert(!owle::apply_connectable<Connection<int, bool>, Apply<void>>,
               "<Connection<int, bool>, Process<void>> hasn't ProcessConnectable concept");
 
 static_assert(owle::connectable<Connection<int, bool>, int>,

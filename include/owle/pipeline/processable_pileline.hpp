@@ -25,11 +25,11 @@ struct processable_binder<ConnectionType, UnaryArgType> {
 };
 
 template <class ConnectionType, owle::applicable ApplicableType>
-requires process_connectable<ConnectionType, ApplicableType>
+requires apply_connectable<ConnectionType, ApplicableType>
 struct processable_binder<ConnectionType, ApplicableType> {
   decltype(auto) apply() {
-    return std::forward<ConnectionType>(_connection).apply(
-        std::forward<ApplicableType>(_applicable).apply());
+    return std::forward<ConnectionType>(_connection)
+        .apply(std::forward<ApplicableType>(_applicable).apply());
   }
 
   ConnectionType &&_connection;
@@ -45,9 +45,8 @@ inline decltype(auto) operator|(Type &&value, ConnectionType &&connection) {
 }
 
 // connection.process(processable.process())
-template <class ApplicableType, class ConnectionType>
-requires owle::applicable<ApplicableType> &&
-    owle::process_connectable<ConnectionType, ApplicableType>
+template <owle::applicable ApplicableType, class ConnectionType>
+requires owle::apply_connectable<ConnectionType, ApplicableType>
 inline decltype(auto) operator|(ApplicableType &&applier, ConnectionType &&connection) {
   return owle::processable_binder<ConnectionType, ApplicableType>{
       std::forward<ConnectionType>(connection), std::forward<ApplicableType>(applier)};

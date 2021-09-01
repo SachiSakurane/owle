@@ -11,12 +11,12 @@ concept args_connectable = requires(ConnectableType &c) {
 };
 
 template <class ConnectionType, class ApplicableType>
-concept process_connectable = owle::applicable<ApplicableType> &&
+concept apply_connectable = owle::applicable<ApplicableType> &&
     requires(ConnectionType &c, ApplicableType &p) {
   c.apply(p.apply());
 };
 
 template <class ConnectionType, class Type>
 concept connectable =
-    args_connectable<ConnectionType, Type> || process_connectable<ConnectionType, Type>;
+    args_connectable<ConnectionType, Type> || apply_connectable<ConnectionType, Type>;
 } // namespace owle
