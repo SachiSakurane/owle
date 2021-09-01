@@ -42,10 +42,10 @@ struct BidirectionalBus : BasicBaseBus {
 
 template <class From, class To>
 struct Connection {
-    To operator()(From v);
+    To apply(From v);
 };
 
 template <class Type>
-struct Process {
-    Type operator()();
+struct Apply {
+    Type apply();
 };

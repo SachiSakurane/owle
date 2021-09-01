@@ -2,18 +2,18 @@
 
 #include <utility>
 
-#include <owle/concepts/processable.hpp>
+#include <owle/concepts/applicable.hpp>
 
 namespace owle {
 template <class ConnectableType, class ArgumentType>
-concept args_connectable = requires(ConnectableType &c, ArgumentType &arg) {
-  c(arg);
+concept args_connectable = requires(ConnectableType &c) {
+  c.apply(std::declval<ArgumentType>());
 };
 
-template <class ConnectionType, class ProcessableType>
-concept process_connectable = owle::processable<ProcessableType> &&
-    requires(ConnectionType &c, ProcessableType &p) {
-  c(p());
+template <class ConnectionType, class ApplicableType>
+concept process_connectable = owle::applicable<ApplicableType> &&
+    requires(ConnectionType &c, ApplicableType &p) {
+  c.apply(p.apply());
 };
 
 template <class ConnectionType, class Type>

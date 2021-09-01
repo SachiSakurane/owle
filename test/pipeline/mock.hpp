@@ -5,10 +5,10 @@
 template <class From, class To>
 requires owle::convertible_to<From, To>
 struct Connection {
-  To operator()(From v) { return static_cast<To>(v); }
+  To apply(From v) { return static_cast<To>(v); }
 };
 
 template <class Type, Type Value>
-struct Process {
-  Type operator()() { return Value; }
+struct Applier {
+  Type apply() { return Value; }
 };
