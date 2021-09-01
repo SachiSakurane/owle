@@ -40,11 +40,6 @@ struct BidirectionalBus : BasicBaseBus {
     value_type* data(std::size_t);
 };
 
-template <class From, class To>
-struct Connection {
-    To apply(From v);
-};
-
 template <class Type>
 struct Apply {
     Type apply();
