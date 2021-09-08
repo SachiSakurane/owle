@@ -1,4 +1,4 @@
 #pragma once
 
-#include <owle/pipeline/applicable.hpp>
-#include <owle/pipeline/connect.hpp>
+#include <owle/pipeline/connectable_pipeline.hpp>
+#include <owle/pipeline/processable_pileline.hpp>
