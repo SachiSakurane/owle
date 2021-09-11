@@ -1,17 +1,14 @@
 #pragma once
 
-#include <owle/pipeline/processable_pileline.hpp>
+#include <owle/range/processable.hpp>
 
 namespace owle {
 template <class LeftType, class RightType>
 struct connectable_binder {
   template <class Type>
-  requires owle::connectable<LeftType, Type> &&
-      owle::apply_connectable<RightType, decltype(std::declval<Type>() | std::declval<LeftType>())>
+  requires owle::connectable<LeftType, Type>
   decltype(auto) apply(Type &&value) {
-    return (std::forward<Type>(value) | std::forward<LeftType>(left) |
-            std::forward<RightType>(right))
-        .apply();
+    return std::forward<RightType>(right).apply(std::forward<LeftType>(left).apply(std::forward<Type>(value)));
   }
 
   LeftType &&left;
