@@ -6,7 +6,7 @@ namespace owle {
 template <class LeftType, class RightType>
 struct connectable_binder {
   template <class Type>
-  requires owle::connectable<LeftType, Type>
+  requires owle::connectable<Type, LeftType>
   decltype(auto) apply(Type &&value) {
     return std::forward<RightType>(right).apply(std::forward<LeftType>(left).apply(std::forward<Type>(value)));
   }
